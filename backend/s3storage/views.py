@@ -42,10 +42,14 @@ class FileAPIView(APIView):
 
             if "Contents" in response:
                 for obj in response["Contents"]:
+                    key = obj["Key"]
+                    internal_url = f"{settings.AWS_S3_ENDPOINT_URL}/{settings.AWS_STORAGE_BUCKET_NAME}/{key}"
+                    public_url = internal_url.replace("localstack", "localhost")
                     files.append({
                         "key": obj["Key"],
                         "size": obj["Size"],
-                        "last_modified": obj["LastModified"].isoformat()
+                        "last_modified": obj["LastModified"].isoformat(),
+                        "public_url": public_url,
                     })
             
             return_data = {"files": files}
