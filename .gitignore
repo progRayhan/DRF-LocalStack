@@ -1,0 +1,53 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenv
+env/
+venv/
+.venv/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+*.pyo
+
+# Migrations
+**/migrations/*
+!**/migrations/__init__.py
+
+# Static files and media
+/static/
+/media/
+/staticfiles/
+/mediafiles/
+
+# Ignore local development settings
+/local_settings.py
+
+# Ignore IDE project files
+.vscode/
+.idea/
+
+# Test coverage
+htmlcov/
+.coverage
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+*.idea/
+*.iml
+
+# macOS and Linux system files
+.DS_Store
+*.swp
+.swo
+*~
