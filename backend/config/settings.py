@@ -3,11 +3,9 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-+oy4r)r8&r=5css*@8l9=z)x&vhnc1r#cphakd_coco=%dj_!8'
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get("DEBUG", "0") == "1"
+SECRET_KEY = os.environ.get("SECRET_KEY")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -60,9 +58,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT", 5432),
     }
 }
 
@@ -100,12 +102,13 @@ AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
 AWS_S3_ENDPOINT_URL = os.environ.get('AWS_ENDPOINT', 'http://localstack:4566')
 AWS_S3_USE_SSL = False
 AWS_S3_VERIFY = False
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'mybucket')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 's3bucket')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# create s3 bucket on startup
+# Automatically create S3 bucket on startup
 try:
     from .aws_s3 import create_s3_bucket_if_not_exists
     create_s3_bucket_if_not_exists()
 except Exception:
+    # Ignore errors (e.g., if LocalStack is not ready yet)
     pass

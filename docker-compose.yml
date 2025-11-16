@@ -12,6 +12,17 @@ services:
       - "./localstack:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
+  postgres:
+    image: postgres:15-alpine
+    container_name: drf-localstack-postgres
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
   backend:
     build:
       context: ./backend
@@ -25,9 +36,9 @@ services:
       - "8000:8000"
     depends_on:
       - localstack
-    environment:
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - AWS_DEFAULT_REGION=us-east-1
-      - AWS_ENDPOINT=http://localstack:4566
-      - AWS_STORAGE_BUCKET_NAME=mybucket
+      - postgres
+    env_file:
+      - ./.env
+
+volumes:
+  pgdata:
