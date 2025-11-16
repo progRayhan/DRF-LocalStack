@@ -17,10 +17,12 @@ class FileAPIView(APIView):
         filename = default_storage.save(f'uploads/{uploaded_file.name}', uploaded_file)
         file_url = default_storage.url(filename)
 
+        public_url = file_url.replace("localstack", "localhost")
+        
         return_data = {
             "success": True,
             "filename": filename,
-            "url": file_url
+            "url": public_url
         }
 
         return Response(return_data, status=HTTP_201_CREATED)
