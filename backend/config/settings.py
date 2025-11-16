@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -80,3 +81,20 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AWS / LocalStack settings
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'test')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'test')
+AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_ENDPOINT', 'http://localstack:4566')
+AWS_S3_USE_SSL = False
+AWS_S3_VERIFY = False
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'mybucket')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# create s3 bucket on startup
+try:
+    from .aws_s3 import create_s3_bucket_if_not_exists
+    create_s3_bucket_if_not_exists()
+except Exception:
+    pass

@@ -51,3 +51,18 @@ htmlcov/
 *.swp
 .swo
 *~
+
+# LocalStack AWS cache
+localstack/
+.localstack/
+localstack-data/
+.localstack-data/
+localstack-volume/
+.localstack-volumes/
+var/lib/localstack/
+tmp/localstack/
+.ls-cache/
+
+# LocalStack state files
+localstack_state.json
+localstack-bootstrap-*
